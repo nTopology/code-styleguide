@@ -14,7 +14,10 @@
 
 <h2 id="Background" class="ignoreLink">Background</h2>
 
-<p>C++ is one of the main development languages  used by
+<p>C++ is the main development language at <b>nTopology</b>, and we
+share a lot of the patterns indicated in the original document.</p>
+
+<p>C++ is one of the main development languages used by
 many of Google's open-source projects. As every C++
 programmer knows, the language has many powerful features, but
 this power brings with it complexity, which in turn can make
@@ -36,12 +39,14 @@ Most open-source projects developed by
 Google conform to the requirements in this guide.
 </p>
 
-
-
 <p>Note that this guide is not a C++ tutorial: we assume that
 the reader is familiar with the language. </p>
 
 <h3 id="Goals">Goals of the Style Guide</h3>
+
+<p><b>nTopology:</b> In practice, not every point below applies to nTopology,
+but the general points are shared and at the core of much of the design
+to date. If we want to add more here, add points after this paragraph.</p>
 
 <p>Why do we have this document?</p>
 
@@ -169,20 +174,22 @@ input.</p>
   initializers</a>. The C++ version targeted by this guide will advance
   (aggressively) over time.</p>
 
+<p>This will soon change when we move to C++20. Staying up to date with
+C++ features is part of the nTopology DNA, and we will try to keep
+this pattern for as long as it is sustainable.</p>
+
 
 
 <p>Do not use
   <a href="#Nonstandard_Extensions">non-standard extensions</a>.</p>
 
-  <div>Consider portability to other environments
-before using features from C++14 and C++17 in your project.
-</div>
-
 <h2 id="Header_Files">Header Files</h2>
 
-<p>In general, every <code>.cc</code> file should have an
+<p>At nTopology, we use the <code>.cpp</code> extension. <p>
+
+<p>In general, every <code>.cpp</code> file should have an
 associated <code>.h</code> file. There are some common
-exceptions, such as unit tests and small <code>.cc</code> files containing
+exceptions, such as unit tests and small <code>.cpp</code> files containing
 just a <code>main()</code> function.</p>
 
 <p>Correct use of header files can make a huge difference to
@@ -198,39 +205,49 @@ pitfalls of using header files.</p>
 end in <code>.h</code>.  Non-header files that are meant for inclusion
 should end in <code>.inc</code> and be used sparingly.</p>
 
+<p><b>nTopology:</b> We do not yet use .inc files. </p>
+
 <p>All header files should be self-contained. Users and refactoring
 tools should not have to adhere to special conditions to include the
 header. Specifically, a header should
 have <a href="#The__define_Guard">header guards</a> and include all
 other headers it needs.</p>
 
+<p><b>nTopology:</b> We use <a href="#The__pragma_Guard">#pragma once</a>
+guards.</p>
+
 <p>When a header declares inline functions or templates that clients of the
 header will instantiate, the inline functions and templates must also have
 definitions in the header, either directly or in files it includes.  Do not move
 these definitions to separately included header (<code>-inl.h</code>) files;
 this practice was common in the past, but is no longer allowed.  When all
-instantiations of a template occur in one <code>.cc</code> file, either because
+instantiations of a template occur in one <code>.cpp</code> file, either because
 they're <a href="https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation">
 explicit</a> or because the definition is accessible to only
-the <code>.cc</code> file, the template definition can be kept in that file.</p>
+the <code>.cpp</code> file, the template definition can be kept in that file.</p>
 
-<p>There are rare cases where a file designed to be included is not
+<p><strike>There are rare cases where a file designed to be included is not
 self-contained.  These are typically intended to be included at unusual
 locations, such as the middle of another file.  They might not
 use <a href="#The__define_Guard">header guards</a>, and might not include
 their prerequisites.  Name such files with the <code>.inc</code>
 extension.  Use sparingly, and prefer self-contained headers when
-possible.</p>
+possible.</strike></p>
+
+<p><b>nTopology:</b> We do not yet use .inc files. </p>
 
 <h3 id="The__define_Guard">The #define Guard</h3>
 
-<p>All header files should have <code>#define</code> guards to
+<p><b>nTopology:</b> We use <code>#pragma once</code> guards.</p>
+
+
+<h3 id="The__pragma_Guard">The #pragma once Guard</h3>
+
+<p>All header files should have <code>#pragma once</code> guards to
 prevent multiple inclusion. The format of the symbol name
 should be
 
 <code><i>&lt;PROJECT&gt;</i>_<i>&lt;PATH&gt;</i>_<i>&lt;FILE&gt;</i>_H_</code>.</p>
-
-
 
 <div>
 <p>To guarantee uniqueness, they should
@@ -240,15 +257,11 @@ project <code>foo</code> should have the following
 guard:</p>
 </div>
 
-<pre>#ifndef FOO_BAR_BAZ_H_
-#define FOO_BAR_BAZ_H_
+<pre>#pragma once
 
 ...
 
-#endif  // FOO_BAR_BAZ_H_
 </pre>
-
-
 
 <h3 id="Include_What_You_Use">Include What You Use</h3>
 
@@ -261,9 +274,13 @@ include header files for any other reason.
 <p>Do not rely on transitive inclusions. This allows people to remove
 no-longer-needed <code>#include</code> statements from their headers without
 breaking clients. This also applies to related headers
-- <code>foo.cc</code> should include <code>bar.h</code> if it uses a
+- <code>foo.cpp</code> should include <code>bar.h</code> if it uses a
 symbol from it even if <code>foo.h</code>
 includes <code>bar.h</code>.</p>
+
+<p><b>nTopology:</b> We still recommend the above, but to date we have a lot
+of transitive includes. Removing includes is encouraged as long as it is
+not removable due to it being transitive.</p>
 
 <h3 id="Forward_Declarations">Forward Declarations</h3>
 
