@@ -205,7 +205,7 @@ pitfalls of using header files.</p>
 end in <code>.h</code>.  Non-header files that are meant for inclusion
 should end in <code>.inc</code> and be used sparingly.</p>
 
-<p><b>nTopology:</b> We do not yet use .inc files. </p>
+<p class="ntop"> We do not yet use .inc files. </p>
 
 <p>All header files should be self-contained. Users and refactoring
 tools should not have to adhere to special conditions to include the
@@ -213,7 +213,7 @@ header. Specifically, a header should
 have <a href="#The__define_Guard">header guards</a> and include all
 other headers it needs.</p>
 
-<p><b>nTopology:</b> We use <a href="#The__pragma_Guard">#pragma once</a>
+<p class="ntop"> We use <a href="#The__pragma_Guard">#pragma once</a>
 guards.</p>
 
 <p>When a header declares inline functions or templates that clients of the
@@ -234,11 +234,11 @@ their prerequisites.  Name such files with the <code>.inc</code>
 extension.  Use sparingly, and prefer self-contained headers when
 possible.</strike></p>
 
-<p><b>nTopology:</b> We do not yet use .inc files. </p>
+<p class="ntop"> We do not yet use .inc files. </p>
 
 <h3 id="The__define_Guard">The #define Guard</h3>
 
-<p><b>nTopology:</b> We use <code>#pragma once</code> guards.</p>
+<p class="ntop"> We use <code>#pragma once</code> guards.</p>
 
 
 <h3 id="The__pragma_Guard">The #pragma once Guard</h3>
@@ -278,15 +278,17 @@ breaking clients. This also applies to related headers
 symbol from it even if <code>foo.h</code>
 includes <code>bar.h</code>.</p>
 
-<p><b>nTopology:</b> We still recommend the above, but to date we have a lot
+<p class="ntop"> We still recommend the above, but to date we have a lot
 of transitive includes. Removing includes is encouraged as long as it is
 not removable due to it being transitive.</p>
 
 <h3 id="Forward_Declarations">Forward Declarations</h3>
 
-<p>Avoid using forward declarations where possible.
+<p class="ntop"> We recommend forward declarations whenever possible.</p>
+
+<p><strike>Avoid using forward declarations where possible.
   Instead, <a href="#Include_What_You_Use">include the headers you need</a>.
-</p>
+</strike></p>
 
 
 <p class="definition"></p>
@@ -340,7 +342,7 @@ ABSL_DECLARE_FLAG(flag_in_b);
 struct B {};
 struct D : B {};
 
-// good_user.cc:
+// good_user.cpp:
 #include "b.h"
 void f(B*);
 void f(void*);
@@ -363,8 +365,16 @@ void test(D* x) { f(x); }  // Calls f(B*)
 </ul>
 
 <p class="decision"></p>
-<p>Try to avoid forward declarations of entities
-defined in another project.</p>
+
+<p><strike>Try to avoid forward declarations of entities
+defined in another project.</strike></p>
+
+<p class="ntop"> We have historically favored forward declarations in order
+to avoid compile times from getting out of hand. Some of the cons are less
+problematic for us because we have a monolithic repo and structure.</br> It is
+not recommended to turn things to pointers in order to use forward declarations.
+it is preferable to restructure the code so as to avoid nasty includes or
+unnecessary heap allocations.</p>
 
 <h3 id="Inline_Functions">Inline Functions</h3>
 
@@ -411,7 +421,12 @@ place its definition in the class, either for convenience
 or to document its behavior, e.g., for accessors and
 mutators.</p>
 
+<p class="ntop"> We have not followed this style strictly, but it maybe good to
+start applying it more.</p>
+
 <h3 id="Names_and_Order_of_Includes">Names and Order of Includes</h3>
+
+<p class="ntop_todo">This section needs to be updated to reflect our style.</p>
 
 <p>Include headers in the following order: Related header, C system headers,
 C++ standard library headers,
@@ -431,8 +446,8 @@ should be included as:</p>
 <pre>#include "base/logging.h"
 </pre>
 
-<p>In <code><var>dir/foo</var>.cc</code> or
-<code><var>dir/foo_test</var>.cc</code>, whose main
+<p>In <code><var>dir/foo</var>.cpp</code> or
+<code><var>dir/foo_test</var>.cpp</code>, whose main
 purpose is to implement or test the stuff in
 <code><var>dir2/foo2</var>.h</code>, order your includes
 as follows:</p>
@@ -468,15 +483,15 @@ as follows:</p>
 
 <p>With the preferred ordering, if the related header
 <code><var>dir2/foo2</var>.h</code> omits any necessary
-includes, the build of <code><var>dir/foo</var>.cc</code>
-or <code><var>dir/foo</var>_test.cc</code> will break.
+includes, the build of <code><var>dir/foo</var>.cpp</code>
+or <code><var>dir/foo</var>_test.cpp</code> will break.
 Thus, this rule ensures that build breaks show up first
 for the people working on these files, not for innocent
 people in other packages.</p>
 
-<p><code><var>dir/foo</var>.cc</code> and
+<p><code><var>dir/foo</var>.cpp</code> and
 <code><var>dir2/foo2</var>.h</code> are usually in the same
-directory (e.g., <code>base/basictypes_test.cc</code> and
+directory (e.g., <code>base/basictypes_test.cpp</code> and
 <code>base/basictypes.h</code>), but may sometimes be in different
 directories too.</p>
 
@@ -493,7 +508,7 @@ this rule and should be fixed when convenient.</p>
 
 <p>For example, the includes in
 
-<code>google-awesome-project/src/foo/internal/fooserver.cc</code>
+<code>google-awesome-project/src/foo/internal/fooserver.cpp</code>
 might look like this:</p>
 
 <pre>#include "foo/server/fooserver.h"
@@ -615,7 +630,7 @@ class MyClass {
 }  // namespace mynamespace
 </pre>
 
-<pre>// In the .cc file
+<pre>// In the .cpp file
 namespace mynamespace {
 
 // Definition of functions is within scope of the namespace.
@@ -626,7 +641,7 @@ void MyClass::Foo() {
 }  // namespace mynamespace
 </pre>
 
-  <p>More complex <code>.cc</code> files might have additional details,
+  <p>More complex <code>.cpp</code> files might have additional details,
   like flags or using-declarations.</p>
 
 <pre>#include "a.h"
@@ -643,7 +658,7 @@ using ::foo::Bar;
 </pre>
   </li>
 
-  <li>To place generated protocol
+  <strike><li>To place generated protocol
   message code in a namespace, use the
   <code>package</code> specifier in the
   <code>.proto</code> file. See
@@ -651,7 +666,7 @@ using ::foo::Bar;
 
   <a href="https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#package">
   Protocol Buffer Packages</a>
-  for details.</li>
+  for details.</li></strike>
 
   <li>Do not declare anything in namespace
   <code>std</code>, including forward declarations of
@@ -674,7 +689,7 @@ using namespace foo;
   in a header file becomes part of the public
   API exported by that file.</p>
 
-<pre>// Shorten access to some commonly used names in .cc files.
+<pre>// Shorten access to some commonly used names in .cpp files.
 namespace baz = ::foo::bar::baz;
 </pre>
 
@@ -698,7 +713,7 @@ inline void my_inline_function() {
 <a id="Unnamed_Namespaces_and_Static_Variables"></a>
 <h3 id="Internal_Linkage">Internal Linkage</h3>
 
-<p>When definitions in a <code>.cc</code> file do not need to be
+<p>When definitions in a <code>.cpp</code> file do not need to be
 referenced outside that file, give them internal linkage by placing
 them in an unnamed namespace or declaring them <code>static</code>.
 Do not use either of these constructs in <code>.h</code> files.
@@ -712,7 +727,7 @@ the same name, then the two entities are completely independent.</p>
 
 <p class="decision"></p>
 
-<p>Use of internal linkage in <code>.cc</code> files is encouraged
+<p>Use of internal linkage in <code>.cpp</code> files is encouraged
 for all code that does not need to be referenced elsewhere.
 Do not use internal linkage in <code>.h</code> files.</p>
 
@@ -1009,7 +1024,14 @@ does not make an observable difference. For example:</p>
     <code>static const auto&amp; impl = *new T(args...);</code>).</li>
 </ul>
 
+<p class="ntop"> We do not follow this strictly Today. Generally we prefer
+<code>static constexpr std::string_view</code> and similar types. We may
+want to push for this style to be followed more closely in the future.</p>
+
 <h3 id="thread_local">thread_local Variables</h3>
+
+<p class="ntop_todo">We should define if this is something we, what patterns
+we follow today, and how to change this section.</p>
 
 <p><code>thread_local</code> variables that aren't declared inside a function
 must be initialized with a true compile-time constant,
@@ -1166,6 +1188,10 @@ with correctly).</p>
 keyword for conversion operators and single-argument
 constructors.</p>
 
+<p class="ntop"> Unsure how closely we follow this style, but it is a good
+pattern that we may want to consider pushing for. The <code>explicit</code>
+keyword is quite useful and makes APIs more meaningful.</p>
+
 <p class="definition"></p>
 <p>Implicit conversions allow an
 object of one type (called the <dfn>source type</dfn>) to
@@ -1272,6 +1298,9 @@ also omit <code>explicit</code>, in order to support copy-initialization
 <p>A class's public API must make clear whether the class is copyable,
 move-only, or neither copyable nor movable. Support copying and/or
 moving if these operations are clear and meaningful for your type.</p>
+
+<p class="ntop"> We do not strictly follow this style, but we probably should.
+Or at least get much closer to it.</p>
 
 <p class="definition"></p>
 <p>A movable type is one that can be initialized and assigned
@@ -1454,6 +1483,11 @@ and some functors.</p>
 <p>Note that member variables in structs and classes have
 <a href="#Variable_Names">different naming rules</a>.</p>
 
+<p class="ntop">For the most part, we share these semantic meanings. We are
+somewhat more flexible, but following this style will always lead to good
+decisions when deciding between a <code>struct</code> and a <code>class</code>
+</p>
+
 <h3 id="Structs_vs._Tuples">Structs vs. Pairs and Tuples</h3>
 
 <p>Prefer to use a <code>struct</code> instead of a pair or a
@@ -1476,11 +1510,19 @@ tuple whenever the elements can have meaningful names.</p>
   also be required in order to interoperate with existing code or APIs.
 </p>
 
+<p class="ntop">We follow this style--not too strictly. We should push for this
+a lot more, we keep finding pairs to be less self-documenting and less flexible
+when refactoring.</p>
+
 <a id="Multiple_Inheritance"></a>
 <h3 id="Inheritance">Inheritance</h3>
 
 <p>Composition is often more appropriate than inheritance.
 When using inheritance, make it <code>public</code>.</p>
+
+<p class="ntop">We have always tried to follow this to the best of our ability.
+We are not as strict with avoiding private inheritance, but we probably should
+be. Generally we have almost no private inheritance in our codebase.</p>
 
 <p class="definition"></p>
 <p> When a sub-class
@@ -1697,16 +1739,17 @@ apply to operator overloading as well.</p>
 <a href="#Constant_Names">constants</a>. This simplifies reasoning about invariants, at the cost
 of some easy boilerplate in the form of accessors (usually <code>const</code>) if necessary.</p>
 
-<p>For technical
-reasons, we allow data members of a test fixture class defined in a .cc file to
+<p><strike>For technical
+reasons, we allow data members of a test fixture class defined in a .cpp file to
 be <code>protected</code> when using
 
 
 <a href="https://github.com/google/googletest">Google
 Test</a>.
-If a test fixture class is defined outside of the .cc file it is used in, for example in a .h file,
-make data members <code>private</code>.</p>
+If a test fixture class is defined outside of the .cpp file it is used in, for example in a .h file,
+make data members <code>private</code>.</strike></p>
 
+<div class="ntop_wip">
 <h3 id="Declaration_Order">Declaration Order</h3>
 
 <p>Group similar declarations together, placing public parts
@@ -5823,6 +5866,9 @@ occasionally need to break on Windows:</p>
   <code>resource.h</code> and contain only macros, do not
   need to conform to these style guidelines.</li>
 </ul>
+
+</div> <!-- WIP DIV -->
+
 </div>
 </body>
 </html>

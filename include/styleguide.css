@@ -253,6 +253,45 @@ address {
   margin-bottom: 1em;
 }
 
+.ntop:before {
+  content: "nTopology: ";
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1em;
+}
+
+.ntop {
+   background-color: #E3E8F0;
+   border: 1px solid #C5D5F0;
+   padding: 5px 5px 5px 5px;
+}
+
+.ntop_todo:before {
+  content: "nTopology TODO: ";
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1em;
+}
+
+.ntop_todo {
+   background-color: #FFDFDF;
+   border: 1px solid red;
+   padding: 5px 5px 5px 5px;
+}
+
+.ntop_wip:before {
+  content: "nTopology WIP: ";
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1em;
+}
+.ntop_wip {
+   background-color: #DDFCE1;
+   border: 1px solid #CAFCD1;
+   padding: 5px 5px 5px 5px;
+}
+
+
 .note:before {
   content: "Note: ";
   font-weight: bold;
