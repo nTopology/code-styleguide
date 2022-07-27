@@ -50,10 +50,11 @@ This project also contains [cpplint][cpplint], a tool to assist with style
 guide compliance, and [google-c-style.el][emacs], an Emacs settings file for
 Google style. The linter is not (yet) modified to work for `nTopology`
 
-If your project requires that you create a new XML document format, the [XML
+<strike>If your project requires that you create a new XML document format, the [XML
 Document Format Style Guide][xml] may be helpful. In addition to actual style
 rules, it also contains advice on designing your own vs. adapting an existing
-format, on XML instance document formatting, and on elements vs. attributes.
+format, on XML instance document formatting, and on elements vs.
+attributes.</strike>
 
 The style guides in this project are licensed under the CC-By 3.0 License,
 which encourages you to share these documents.
