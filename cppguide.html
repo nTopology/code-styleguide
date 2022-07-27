@@ -2014,10 +2014,10 @@ doubt, use overloads.</p>
   <a href="#Template_metaprogramming">discouraged in most cases</a>.</p>
 
 
-<div class="ntop_wip">
-
 <h2 id="Google-Specific_Magic">Google-Specific Magic</h2>
 
+<p class="ntop">Unless otherwise noted, at <b>nTopology</b> we follow the same
+recommendations outlined here.<p>
 
 
 <div>
@@ -2157,7 +2157,7 @@ do use shared ownership, prefer to use
 
 <h3 id="cpplint">cpplint</h3>
 
-<p>Use <code>cpplint.py</code> to detect style errors.</p>
+<strike><p>Use <code>cpplint.py</code> to detect style errors.</p>
 
 <p><code>cpplint.py</code>
 is a tool that reads a source file and identifies many
@@ -2175,7 +2175,7 @@ you can download
 <a href="https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py">
 <code>cpplint.py</code></a> separately.</p>
 </div>
-
+</strike>
 
 
 <h2 id="Other_C++_Features">Other C++ Features</h2>
@@ -2267,6 +2267,9 @@ qualifier to methods), except as follows:</p>
   performance, make sure you have evidence that it actually helps.</li>
 </ul>
 
+<p class="ntop"> We are not as strict about these rules, but they are great
+guidelines that are probably worth following.</p>
+
 <h3 id="Friends">Friends</h3>
 
 <p>We allow use of <code>friend</code> classes and functions,
@@ -2292,6 +2295,9 @@ members.</p>
 <h3 id="Exceptions">Exceptions</h3>
 
 <p>We do not use C++ exceptions.</p>
+
+<p class="ntop">This has become, somehow, a controversial topic worth revising
+with our own caveats and exceptions to the rule (no pun intended).<p>
 
 <p class="pros"></p>
 <ul>
@@ -2460,7 +2466,7 @@ there is significant performance benefit from specifying
 with
 your project leads.</p>
 
-<p>Prefer unconditional <code>noexcept</code> if exceptions are
+<p><strike>Prefer unconditional <code>noexcept</code> if exceptions are
 completely disabled (i.e., most Google C++ environments).
 Otherwise, use conditional <code>noexcept</code> specifiers
 with simple conditions, in ways that evaluate false only in
@@ -2483,12 +2489,16 @@ instead of writing a complicated <code>noexcept</code> clause
 that depends on whether a hash function can throw, for example,
 simply document that your component doesn’t support hash
 functions throwing and make it unconditionally
-<code>noexcept</code>.</p>
+<code>noexcept</code>.</strike></p>
 
 <h3 id="Run-Time_Type_Information__RTTI_">Run-Time Type
 Information (RTTI)</h3>
 
 <p>Avoid using run-time type information (RTTI).</p>
+
+<p class="ntop">This is a good guideline that has obvious use-cases. Avoiding
+the use of RTTI generally leads to better code, even when it may require more
+planning.</p>
 
 <p class="definition"></p>
 <p> RTTI allows a
@@ -2922,8 +2932,14 @@ definitions. Avoid complexifying function definitions to
 enable their use with <code>constexpr</code>. Do not use
 <code>constexpr</code> to force inlining.</p>
 
+<div class="ntop_wip">
+
 <h3 id="Integer_Types">Integer Types</h3>
 
+<p class="ntop_todo">We don't really follow this style. It may merit some
+discussion on what we want to document for our integer type style</p>
+
+<strike>
 <p>Of the built-in C++ integer types, the only one used
  is
 <code>int</code>. If a program needs a variable of a
@@ -2986,6 +3002,7 @@ rather than a smaller type.</p>
 <p>Use care when converting integer types. Integer conversions and
 promotions can cause undefined behavior, leading to security bugs and
 other problems.</p>
+</strike>
 
 <h4>On Unsigned Integers</h4>
 
@@ -3007,8 +3024,13 @@ not to mix signedness, and try to avoid unsigned types (except for
 representing bitfields or modular arithmetic). Do not use an unsigned
 type merely to assert that a variable is non-negative.</p>
 
+<p class="ntop">While we don't strictly follow this, it may be good advice.</p>
+
 <h3 id="64-bit_Portability">64-bit Portability</h3>
 
+<p class="ntop">We have not developed any opinion on this.</p>
+
+<strike>
 <p>Code should be 64-bit and 32-bit friendly. Bear in mind
 problems of printing, comparisons, and structure alignment.</p>
 
@@ -3072,6 +3094,8 @@ uint64_t my_mask{uint64_t{3} &lt;&lt; 48};
 </pre>
   </li>
 </ul>
+
+</strike>
 
 <h3 id="Preprocessor_Macros">Preprocessor Macros</h3>
 
@@ -3203,6 +3227,11 @@ memset(&amp;data, 0, sizeof(data));
 <p>Use type deduction only if it makes the code clearer to readers who aren't
   familiar with the project, or if it makes the code safer. Do not use it
   merely to avoid the inconvenience of writing an explicit type.</p>
+
+<p class=ntop>Historically we have used auto extensively. This is still the
+status quo, and left largely to the developer's discretion. We could become
+more opinionated if there is concensus. We have not found major drawbacks to
+auto, although compilation times have not been measured.</p>
 
 <p class="definition"></p>
 
@@ -3397,6 +3426,9 @@ std::array numbers = {4, 8, 15, 16, 23, 42};</pre>
   <em>is</em> the interface. In particular, public functions in header files
   should almost never have deduced return types.</p>
 
+<p class="ntop">In general avoid this pattern. It is rarely necessary and adds
+a lot of overhead on understanding the code.</p>
+
 <h4>Parameter type deduction</h4>
 
 <p><code>auto</code> parameter types for lambdas should be used with caution,
@@ -3407,6 +3439,8 @@ std::array numbers = {4, 8, 15, 16, 23, 42};</pre>
   or the lambda is passed to an interface so well-known that it's
   obvious what arguments it will eventually be called with (e.g.,
   the <code>std::sort</code> example above).</p>
+
+<p class "ntop">We generally avoid this.</p>
 
 <h4>Lambda init captures</h4>
 
@@ -3436,6 +3470,8 @@ std::array numbers = {4, 8, 15, 16, 23, 42};</pre>
   <pre>auto [/*field_name1=*/bound_name1, /*field_name2=*/bound_name2] = ...</pre>
 <p>As with function parameter comments, this can enable tools to detect if
   you get the order of the fields wrong.</p>
+
+<div class="ntop_wip">
 
 <h3 id="CTAD">Class Template Argument Deduction</h3>
 
