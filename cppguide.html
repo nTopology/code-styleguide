@@ -1749,7 +1749,6 @@ Test</a>.
 If a test fixture class is defined outside of the .cpp file it is used in, for example in a .h file,
 make data members <code>private</code>.</strike></p>
 
-<div class="ntop_wip">
 <h3 id="Declaration_Order">Declaration Order</h3>
 
 <p>Group similar declarations together, placing public parts
@@ -1799,12 +1798,11 @@ Functions</a> for more details.</p>
 <p>The output of a C++ function is naturally provided via
 a return value and sometimes via output parameters (or in/out parameters).</p>
 
-<p>Prefer using return values over output parameters: they
-improve readability, and often provide the same or better
-performance.</p>
+<p>Prefer using return values over output parameters: they improve readability,
+and often provide the same or better performance.</p>
 
-<p>Prefer to return by value or, failing that, return by reference.
-Avoid returning a pointer unless it can be null.</p>
+<p>Prefer to return by value or, failing that, return by reference (generally
+const). Avoid returning a pointer unless it can be null.</p>
 
 <p>Parameters are either inputs to the function, outputs from the
 function, or both. Non-optional input parameters should usually be values
@@ -1815,25 +1813,22 @@ inputs, and use a <code>const</code> pointer when the non-optional form would
 have used a reference. Use non-<code>const</code> pointers to represent
 optional outputs and optional input/output parameters.</p>
 
+<p class="ntop">We are not toos stict about <code>std::optional</code> use,
+but it is generally a good recommendation.</p>
 
-
-<p>
-Avoid defining functions that require a <code>const</code> reference parameter
-to outlive the call, because <code>const</code> reference parameters bind
-to temporaries. Instead, find a way to eliminate the lifetime requirement
+<p> Avoid defining functions that require a <code>const</code> reference
+parameter to outlive the call, because <code>const</code> reference parameters
+bind to temporaries. Instead, find a way to eliminate the lifetime requirement
 (for example, by copying the parameter), or pass it by <code>const</code>
-pointer and document the lifetime and non-null requirements.
+pointer and document the lifetime and non-null requirements. </p>
 
-</p>
-
-<p>When ordering function parameters, put all input-only
-parameters before any output parameters. In particular,
-do not add new parameters to the end of the function just
-because they are new; place new input-only parameters before
-the output parameters. This is not a hard-and-fast rule. Parameters that
-are both input and output muddy the waters, and, as always,
-consistency with related functions may require you to bend the rule.
-Variadic functions may also require unusual parameter ordering.</p>
+<p>When ordering function parameters, put all input-only parameters before any
+output parameters. In particular, do not add new parameters to the end of the
+function just because they are new; place new input-only parameters before the
+output parameters. This is not a hard-and-fast rule. Parameters that are both
+input and output muddy the waters, and, as always, consistency with related
+functions may require you to bend the rule. Variadic functions may also require
+unusual parameter ordering.</p>
 
 <h3 id="Write_Short_Functions">Write Short Functions</h3>
 
@@ -2018,6 +2013,8 @@ doubt, use overloads.</p>
   issue in fairly complicated template code, which is
   <a href="#Template_metaprogramming">discouraged in most cases</a>.</p>
 
+
+<div class="ntop_wip">
 
 <h2 id="Google-Specific_Magic">Google-Specific Magic</h2>
 
