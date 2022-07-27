@@ -3469,12 +3469,12 @@ a lot of overhead on understanding the code.</p>
 <p>As with function parameter comments, this can enable tools to detect if
   you get the order of the fields wrong.</p>
 
-<div class="ntop_wip">
-
 <h3 id="CTAD">Class Template Argument Deduction</h3>
 
 <p>Use class template argument deduction only with templates that have
   explicitly opted into supporting it.</p>
+
+<p class="ntop_todo">Unsure if this is used in our code Today.</p>
 
 <p class="definition"></p>
 <p><a href="https://en.cppreference.com/w/cpp/language/class_template_argument_deduction">Class
@@ -3572,8 +3572,6 @@ according to C++20 to initialize <code>x</code> and then <code>z</code>, but not
 <p>Use designated initializers only in the form that is compatible with the
 C++20 standard: with initializers in the same order as the corresponding fields
 appear in the struct definition.</p>
-
-
 
 <h3 id="Lambda_expressions">Lambda Expressions</h3>
 
@@ -3807,6 +3805,8 @@ and actionable from a user point of view.</p>
 <p>Use only approved libraries from the Boost library
 collection.</p>
 
+<p class="ntop_todo">We don't follow this yet. We probably should.</p>
+
 <p class="definition"></p>
 <p> The
 <a href="https://www.boost.org/">
@@ -3826,14 +3826,14 @@ advanced template techniques, and an excessively
 
 <p class="decision"></p>
 
-
-
 <div>
 <p>In order to maintain a high level of readability for
 all contributors who might read and maintain code, we
 only allow an approved subset of Boost features.
 Currently, the following libraries are permitted:</p>
 
+
+<strike>
 <ul>
   <li>
   <a href="https://www.boost.org/libs/utility/call_traits.htm">
@@ -3897,10 +3897,10 @@ Currently, the following libraries are permitted:</p>
   <li><a href="https://www.boost.org/libs/preprocessor/">Preprocessor</a>
   from <code>boost/preprocessor</code>.</li>
 </ul>
+</strike>
 
-<p>We are actively considering adding other Boost
-features to the list, so this list may be expanded in
-the future.</p>
+<p>We need to decide which of these we want, and we can always extend if
+necessary.</p>
 </div>
 
 
@@ -3908,7 +3908,10 @@ the future.</p>
 
 <h3 id="Other_Features"><a id="C++11">Other C++ Features</a></h3>
 
+<p class="ntop_todo">We use filesystem. Not sure about the others. We could
+reconsider in the future if this is truly a problem.</p>
 
+<strike>
 <p>As with <a href="#Boost">Boost</a>, some modern C++
 extensions encourage coding practices that hamper
 readability—for example by removing
@@ -3938,6 +3941,7 @@ guide, the following C++ features may not be used:</p>
 
   does not have sufficient support for testing, and suffers
   from inherent security vulnerabilities.</li>
+</strike>
 
 
 </ul>
@@ -3983,7 +3987,8 @@ guide, the following C++ features may not be used:</p>
 
 <h3 id="Aliases">Aliases</h3>
 
-<p>Public aliases are for the benefit of an API's user, and should be clearly documented.</p>
+<p>Public aliases are for the benefit of an API's user, and should be clearly
+documented.</p>
 
 <p class="definition"></p>
 <p>There are several ways to create names that are aliases of other entities:</p>
@@ -3992,15 +3997,15 @@ using Bar = Foo;
 using other_namespace::Foo;
 </pre>
 
-  <p>In new code, <code>using</code> is preferable to <code>typedef</code>,
-  because it provides a more consistent syntax with the rest of C++ and works
-  with templates.</p>
+  <p>Unless absolutely necessary, always use <code>using</code>, because it
+  provides a more consistent syntax with the rest of C++ and works with
+  templates.</p>
 
-  <p>Like other declarations, aliases declared in a header file are part of that
-  header's public API unless they're in a function definition, in the private portion of a class,
-  or in an explicitly-marked internal namespace. Aliases in such areas or in .cc files are
-  implementation details (because client code can't refer to them), and are not restricted by this
-  rule.</p>
+  <p>Like other declarations, aliases declared in a header file are part of
+  that header's public API unless they're in a function definition, in the
+  private portion of a class, or in an explicitly-marked internal namespace.
+  Aliases in such areas or in .cpp files are implementation details (because
+  client code can't refer to them), and are not restricted by this rule.</p>
 
 <p class="pros"></p>
   <ul>
@@ -4060,9 +4065,9 @@ typedef unordered_set&lt;DataPoint, hash&lt;DataPoint&gt;, DataPointComparator&g
 </pre>
 
 <p>However, local convenience aliases are fine in function definitions, private sections of
-  classes, explicitly marked internal namespaces, and in .cc files:</p>
+  classes, explicitly marked internal namespaces, and in .cpp files:</p>
 
-<pre>// In a .cc file
+<pre>// In a .cpp file
 using ::foo::Bar;
 </pre>
 
@@ -4078,6 +4083,12 @@ use "they"/"them"/"their" for people of unspecified gender
 (<a href="https://apastyle.apa.org/style-grammar-guidelines/grammar/singular-they">even
 when singular</a>), and "it"/"its" for software, computers, and other
 things that aren't people.</p>
+
+<p class="ntop">We do not have strict rules on this, but generally we avoid
+controversial language. If we develop stricters rules they should be linked
+here. Otherwise we should always err on the side of using language that is not
+widely controversial. Often, there is more specific wording that can be used
+instead of some of these metaphors.</p>
 
 
 
@@ -4170,6 +4181,8 @@ category: type template parameters should follow the rules for
 <a href="#Type_Names">type names</a>, and non-type template
 parameters should follow the rules for <a href="#Variable_Names">
 variable names</a>.
+
+<div class="ntop_wip">
 
 </p><h3 id="File_Names">File Names</h3>
 
@@ -5273,7 +5286,11 @@ if (condition1 &amp;&amp;
   DoSomething();
 </pre>
 
+</div> <!-- WIP DIV -->
+
 <h3 id="Loops_and_Switch_Statements">Loops and Switch Statements</h3>
+
+<p class="ntop">This is mostly encoded in our clang-format rules.</p>
 
 <p>Switch statements may use braces for blocks. Annotate
 non-trivial fall-through between cases.
@@ -5295,8 +5312,8 @@ case should never execute, treat this as an error. For example:
 
 <div>
 <pre>switch (var) {
-  case 0: {  // 2 space indent
-    ...      // 4 space indent
+  case 0: {
+    ...    
     break;
   }
   case 1: {
@@ -5338,12 +5355,14 @@ annotation is needed.</p>
 }
 </pre>
 
-<p> Braces are optional for single-statement loops.</p>
+<p> Braces are NOT optional for single-statement loops.</p>
 
-<pre>for (int i = 0; i &lt; kSomeNumber; ++i)
-  printf("I love you\n");
+<pre class="badcode">
+  // Bad - braces missing
+  for (int i = 0; i &lt; kSomeNumber; ++i)
+  printf("I love you\n");</pre>
 
-for (int i = 0; i &lt; kSomeNumber; ++i) {
+<pre>for (int i = 0; i &lt; kSomeNumber; ++i) {
   printf("I take it back\n");
 }
 </pre>
@@ -5363,6 +5382,8 @@ while (condition) continue;  // Good - continue indicates no logic.
 </pre>
 
 <h3 id="Pointer_and_Reference_Expressions">Pointer and Reference Expressions</h3>
+
+<p class="ntop">This is encoded in our clang-format rules.</p>
 
 <p>No spaces around period or arrow. Pointer operators do not
 have trailing spaces.</p>
@@ -5386,17 +5407,12 @@ x = r-&gt;y;
    <code>*</code> or <code>&amp;</code>.</li>
 </ul>
 
-<p>When referring to a pointer or reference (variable declarations or definitions, arguments,
-return types, template parameters, etc), you may place the space before or after the
-asterisk/ampersand. In the trailing-space style, the space is elided in some cases (template
+<p>When referring to a pointer or reference (variable declarations or
+definitions, arguments, return types, template parameters, etc), place the
+space after the asterisk/ampersand. The space is elided in some cases (template
 parameters, etc).</p>
 
 <pre>// These are fine, space preceding.
-char *c;
-const std::string &amp;str;
-int *GetPointer();
-std::vector&lt;char *&gt;
-
 // These are fine, space following (or elided).
 char* c;
 const std::string&amp; str;
@@ -5412,6 +5428,10 @@ that file.</p>
 It is allowed (if unusual) to declare multiple variables in the same
 declaration, but it is disallowed if any of those have pointer or
 reference decorations. Such declarations are easily misread.
+
+<p class="ntop">We have never used this very heavily in the core areas of our
+code, but we do not have strict rules. This is generally discouraged.</p>
+
 <pre>// Fine if helpful for readability.
 int x, y;
 </pre>
@@ -5423,32 +5443,7 @@ const std::string &amp; str;  // Bad - spaces on both sides of &amp;
 
 <h3 id="Boolean_Expressions">Boolean Expressions</h3>
 
-<p>When you have a boolean expression that is longer than the
-<a href="#Line_Length">standard line length</a>, be
-consistent in how you break up the lines.</p>
-
-<p>In this example, the logical AND operator is always at
-the end of the lines:</p>
-
-<pre>if (this_one_thing &gt; this_other_thing &amp;&amp;
-    a_third_thing == a_fourth_thing &amp;&amp;
-    yet_another &amp;&amp; last_one) {
-  ...
-}
-</pre>
-
-<p>Note that when the code wraps in this example, both of
-the <code>&amp;&amp;</code> logical AND operators are at
-the end of the line. This is more common in Google code,
-though wrapping all operators at the beginning of the
-line is also allowed. Feel free to insert extra
-parentheses judiciously because they can be very helpful
-in increasing readability when used
-appropriately, but be careful about overuse. Also note that you
-should always use the punctuation operators, such as
-<code>&amp;&amp;</code> and <code>~</code>, rather than
-the word operators, such as <code>and</code> and
-<code>compl</code>.</p>
+<p class="ntop">This is encoded in our clang-format rules.</p>
 
 <h3 id="Return_Values">Return Values</h3>
 
@@ -5537,32 +5532,32 @@ beginning of the line.</p>
 
 <h3 id="Class_Format">Class Format</h3>
 
-<p>Sections in <code>public</code>, <code>protected</code> and
-<code>private</code> order, each indented one space.</p>
+<p class="ntop">This is encoded in our clang-format rules.</p>
 
 <p>The basic format for a class definition (lacking the
 comments, see <a href="#Class_Comments">Class
 Comments</a> for a discussion of what comments are
 needed) is:</p>
 
-<pre>class MyClass : public OtherClass {
- public:      // Note the 1 space indent!
-  MyClass();  // Regular 2 space indent.
-  explicit MyClass(int var);
-  ~MyClass() {}
+<pre>
+class MyClass : public OtherClass
+{
+public:       // No indent
+   MyClass();  // Regular indent.
+   explicit MyClass(int var);
+   ~MyClass() {}
 
-  void SomeFunction();
-  void SomeFunctionThatDoesNothing() {
-  }
+   void SomeFunction();
+   void SomeFunctionThatDoesNothing() {}
 
-  void set_some_var(int var) { some_var_ = var; }
-  int some_var() const { return some_var_; }
+   void set_some_var(int var) { some_var_ = var; }
+   int  some_var() const { return some_var_; }
 
- private:
-  bool SomeInternalFunction();
+private:
+   bool SomeInternalFunction();
 
-  int some_var_;
-  int some_other_var_;
+   int some_var_;
+   int some_other_var_;
 };
 </pre>
 
@@ -5570,11 +5565,10 @@ needed) is:</p>
 
 <ul>
   <li>Any base class name should be on the same line as
-  the subclass name, subject to the 80-column limit.</li>
+  the subclass name, subject to the column limit.</li>
 
   <li>The <code>public:</code>, <code>protected:</code>,
-  and <code>private:</code> keywords should be indented
-  one space.</li>
+  and <code>private:</code> keywords should not be indented.</li>
 
   <li>Except for the first instance, these keywords
   should be preceded by a blank line. This rule is
@@ -5594,38 +5588,30 @@ needed) is:</p>
 
 <h3 id="Constructor_Initializer_Lists">Constructor Initializer Lists</h3>
 
-<p>Constructor initializer lists can be all on one line or
-with subsequent lines indented four spaces.</p>
+<p class="ntop">This is encoded in our clang-format rules.</p>
 
-<p>The acceptable formats for initializer lists are:</p>
+<p>Constructor initializer lists are added in subsequent lines.</p>
 
-<pre>// When everything fits on one line:
-MyClass::MyClass(int var) : some_var_(var) {
-  DoSomething();
-}
-
-// If the signature and initializer list are not all on one line,
-// you must wrap before the colon and indent 4 spaces:
-MyClass::MyClass(int var)
-    : some_var_(var), some_other_var_(var + 1) {
-  DoSomething();
-}
-
+<pre>
 // When the list spans multiple lines, put each member on its own line
 // and align them:
 MyClass::MyClass(int var)
-    : some_var_(var),             // 4 space indent
-      some_other_var_(var + 1) {  // lined up
+    : some_var_(var)
+    , some_other_var_(var + 1)
+{
   DoSomething();
 }
 
 // As with any other code block, the close curly can be on the same
 // line as the open curly, if it fits.
 MyClass::MyClass(int var)
-    : some_var_(var) {}
+   : some_var_(var)
+{}
 </pre>
 
 <h3 id="Namespace_Formatting">Namespace Formatting</h3>
+
+<p class="ntop">This is encoded in our clang-format rules.</p>
 
 <p>The contents of namespaces are not indented.</p>
 
@@ -5655,12 +5641,17 @@ void foo() {  // Correct.  No extra indentation within namespace.
 
 <h3 id="Horizontal_Whitespace">Horizontal Whitespace</h3>
 
+<p class="ntop">This is generally managed by clang-format. Our style for this
+is enforced by it and probably not worth codifying here in full. Maybe some
+general aspects could be--or we could point to the old styleguide.</p>
+
 <p>Use of horizontal whitespace depends on location. Never put
 trailing whitespace at the end of a line.</p>
 
+<strike>
 <h4>General</h4>
 
-<pre>int i = 0;  // Two spaces before end-of-line comments.
+<pre>int i = 0;  // One space before end-of-line comments.
 
 void f(bool b) {  // Open braces should always have a space before them.
   ...
@@ -5692,9 +5683,12 @@ else is working on the file).</p>
 <h4>Loops and Conditionals</h4>
 
 <pre>if (b) {          // Space after the keyword in conditions and loops.
-} else {          // Spaces around else.
 }
+else {          // Spaces around else.
+}
+
 while (test) {}   // There is usually no space inside parentheses.
+
 switch (i) {
 for (int i = 0; i &lt; 5; ++i) {
 // Loops and conditions may have spaces inside parentheses, but this
@@ -5746,6 +5740,7 @@ y = static_cast&lt;char*&gt;(x);
 // Spaces between type and pointer are OK, but be consistent.
 std::vector&lt;char *&gt; x;
 </pre>
+</strike>
 
 <h3 id="Vertical_Whitespace">Vertical Whitespace</h3>
 
@@ -5789,30 +5784,21 @@ useful:</p>
 
 <h2 id="Exceptions_to_the_Rules">Exceptions to the Rules</h2>
 
+<p class="ntop_todo">For now this has not been formalized as mandatory.</p>
+
 <p>The coding conventions described above are mandatory.
 However, like all good rules, these sometimes have exceptions,
 which we discuss here.</p>
 
 
-
 <div>
 <h3 id="Existing_Non-conformant_Code">Existing Non-conformant Code</h3>
 
-<p>You may diverge from the rules when dealing with code that
-does not conform to this style guide.</p>
-
-<p>If you find yourself modifying code that was written
-to specifications other than those presented by this
-guide, you may have to diverge from these rules in order
-to stay consistent with the local conventions in that
-code. If you are in doubt about how to do this, ask the
-original author or the person currently responsible for
-the code. Remember that <em>consistency</em> includes
-local consistency, too.</p>
+<p class="ntop">Fixing non-conformant code is encouraged. Exceptions for these
+are external libraries that don't conform to our style. Do not run clang-format
+on them--this makes it harder to merge changes in the original repository.</p>
 
 </div>
-
-
 
 <h3 id="Windows_Code">Windows Code</h3>
 
@@ -5830,7 +5816,7 @@ style:</p>
 <ul>
   <li>Do not use Hungarian notation (for example, naming
   an integer <code>iNum</code>). Use the Google naming
-  conventions, including the <code>.cc</code> extension
+  conventions, including the <code>.cpp</code> extension
   for source files.</li>
 
   <li>Windows defines many of its own synonyms for
@@ -5846,10 +5832,10 @@ style:</p>
   compiler to warning level 3 or higher, and treat all
   warnings as errors.</li>
 
-  <li>Do not use <code>#pragma once</code>; instead use
+  <strike><li>Do not use <code>#pragma once</code>; instead use
   the standard Google include guards. The path in the
   include guards should be relative to the top of your
-  project tree.</li>
+  project tree.</li></strike>
 
   <li>In fact, do not use any nonstandard extensions,
   like <code>#pragma</code> and <code>__declspec</code>,
@@ -5897,8 +5883,6 @@ occasionally need to break on Windows:</p>
   <code>resource.h</code> and contain only macros, do not
   need to conform to these style guidelines.</li>
 </ul>
-
-</div> <!-- WIP DIV -->
 
 </div>
 </body>
